@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Title</title>
+  <link rel="stylesheet" type="text/css" href="../pdf_resources/stylePDF.css"/>
+</head>
+<body>
+
+<div id="doc2" class="yui-t7">
+  <div id="inner">
+
+    <div id="hd">
+      <div class="yui-gc">
+        <div class="yui-u first">
+          <h1 th:text="${resume?.firstName} +' ' +${resume?.lastName}"></h1>
+          <!--          <h2>Web Designer, Director</h2>-->
+        </div>
+        <div class="yui-u">
+          <div class="contact-info">
+            <h3 th:text="${resume?.email}"></h3>
+            <h3 th:text="${resume?.phone}"></h3>
+          </div><!--// .contact-info -->
+        </div>
+      </div><!--// .yui-gc -->
+    </div><!--// hd -->
+
+    <div id="bd">
+      <div id="yui-main">
+        <div class="yui-b">
+
+          <div class="yui-gf">
+            <div class="yui-u first">
+              <h2>Profile</h2>
+            </div>
+            <div class="yui-u">
+              <p class="enlarge" th:text="${resume?.biography}"></p>
+            </div>
+          </div><!--// .yui-gf -->
+
+          <div class="yui-gf">
+            <div class="yui-u first">
+              <h2>Skills</h2>
+            </div>
+            <div class="yui-u">
+
+              <div class="talent" th:each="skill :${skillList}">
+                <h3 th:text="${skill?.skillName}"></h3>
+                <h3 th:text="${skill?.skillRating.toString()}"></h3>
+                <br>
+              </div>
+
+            </div>
+          </div><!--// .yui-gf -->
+
+          <div class="yui-gf">
+
+            <div class="yui-u first">
+              <h2>Experience</h2>
+            </div><!--// .yui-u -->
+
+            <div class="yui-u">
+
+              <div class="job" th:each="experience :${experienceList}">
+                <h2 th:text="${experience?.company}"></h2>
+                <h3 th:text="${experience?.position}"></h3>
+                <h4 th:text="${experience?.dateFrom} +' -- '+${experience?.dateTo}"></h4>
+                <p th:text="${experience?.description}"></p>
+              </div>
+
+              <div class="last"></div>
+
+            </div><!--// .yui-u -->
+          </div><!--// .yui-gf -->
+
+
+          <div class="yui-gf last">
+            <div class="yui-u first">
+              <h2>Education</h2>
+            </div>
+            <div class="yui-u" th:each="education:${educationList}">
+              <h2 th:text="${education?.institution}"></h2>
+              <h3 th:text="${education?.faculty}"></h3>
+              <h4 th:text="${education?.dateFrom} +' -- '+${education?.dateTo}"></h4>
+              <p th:text="${education?.description}"></p>
+              <br>
+            </div>
+          </div><!--// .yui-gf -->
+
+
+        </div><!--// .yui-b -->
+      </div><!--// yui-main -->
+    </div><!--// bd -->
+
+    <div id="ft">
+
+    </div><!--// footer -->
+
+  </div><!-- // inner -->
+
+
+</div><!--// doc -->
+
+
+</body>
+</html>
+

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html"
+      lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add resume</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" th:href="@{profile.css}">
+</head>
+<body>
+<div th:insert="fragments/navigation.html"></div>
+<div class="container text-center card card-style1" style="margin-top: 50px" sec:authorize="isAuthenticated()">
+  <div th:if="${resume.id}==null"><h1>Create resume</h1></div>
+  <div th:unless="${resume.id}==null"><h1>Update resume</h1></div>
+  <form th:action="@{/save-resume}" th:object="${resume}" method="post" id="form">
+    <input type="hidden" th:field="*{id}" th:value="${resume.id}" id="resume_id">
+    <div class="m-3">
+      <div  class="form-group row m-3">
+        <label class="col-form-label col-sm-4">First name</label>
+        <div class="col-sm-4">
+          <input type="text" th:field="*{firstName}" class="form-control" required/>
+          <p th:errors="*{firstName}" class="text-danger"
+             th:if="${#fields.hasErrors('firstName')}">
+          </p>
+        </div>
+      </div>
+      <div  class="form-group row m-3">
+        <label class="col-form-label col-sm-4">Last Name</label>
+        <div class="col-sm-4">
+          <input type="text" th:field="*{lastName}" class="form-control" required/>
+          <p th:errors="*{lastName}" class="text-danger"
+             th:if="${#fields.hasErrors('lastName')}">
+          </p>
+        </div>
+      </div>
+      <div  class="form-group row m-3">
+        <label class="col-form-label col-sm-4">Date of birth</label>
+        <div class="col-sm-4">
+          <input type="date" th:field="*{dateOfBirth}" class="form-control" required th:max="${today}"/>
+          <p th:errors="*{dateOfBirth}" class="text-danger"
+             th:if="${#fields.hasErrors('dateOfBirth')}">
+          </p>
+        </div>
+      </div>
+      <div  class="form-group row m-3">
+        <label class="col-form-label col-sm-4">Phone number</label>
+        <div class="col-sm-4">
+          <input type="text" th:field="*{phone}" class="form-control" required maxlength="9" minlength="9"/>
+          <p th:errors="*{phone}" class="text-danger"
+             th:if="${#fields.hasErrors('phone')}">
+          </p>
+        </div>
+      </div>
+      <div  class="form-group row m-3">
+        <label class="col-form-label col-sm-4">Email</label>
+        <div class="col-sm-4">
+          <input type="text" th:field="*{email}" class="form-control" required/>
+          <p th:errors="*{email}" class="text-danger"
+             th:if="${#fields.hasErrors('email')}">
+          </p>
+        </div>
+      </div>
+      <div  class="form-group row m-3">
+        <label class="col-form-label col-sm-4">Biography</label>
+        <div class="col-sm-4">
+          <!--                        <input type="text" id="description" class="form-control" required/>-->
+          <textarea th:field="*{biography}" cols="33" rows="5" maxlength="2000"></textarea>
+          <p th:errors="*{biography}" class="text-danger"
+             th:if="${#fields.hasErrors('biography')}">
+          </p>
+        </div>
+      </div>
+      <div class="text-center p-3">
+        <button type="submit" class="btn btn-secondary btn-lg" id="save">Save</button>
+<!--        <a th:href="@{/addEducation/{id}(id=${resume.id})}" class="btn btn-secondary btn-lg">Next</a>-->
+      </div>
+    </div>
+  </form>
+</div>
+<!--<div class="row align-items-center">-->
+<!--  <form th:action="@{/addEducation}" th:object="${resume}" method="get">-->
+<!--    <input type="hidden" th:field="*{id}">-->
+<!--    <a th:href="@{/addEducation}"><input type="submit" class="btn btn-secondary btn-lg" th:value="Next"></a>-->
+<!--  </form>-->
+<!--</div>-->
+
+
+</body>
+</html>
