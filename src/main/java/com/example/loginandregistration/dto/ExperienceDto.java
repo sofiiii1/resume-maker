@@ -13,8 +13,8 @@ import java.util.Date;
 public class ExperienceDto {
     private String company;
     private String position;
-    private LocalDate dateFrom;
-    private LocalDate dateTo;
+    private Date dateFrom;
+    private Date dateTo;
     private String description;
     private Integer resumeId;
 }

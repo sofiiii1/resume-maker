@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <title>
+    Experience
+  </title>
+</head>
+<body>
+<div th:insert="fragments/navigation.html"></div>
+<div class="container text-center card card-style1" style="margin-top: 50px" sec:authorize="isAuthenticated()">
+  <div><h1>Update experience</h1></div>
+  <form th:action="'/editExperience/'+${experience.id}"  method="post" id="form">
+    <input type="hidden" name="_method" value="put"/>
+    <div class="m-3">
+      <div  class="form-group row m-3">
+        <label class="col-form-label col-sm-4">Company</label>
+        <div class="col-sm-4">
+          <input type="text" th:field="${experience.company}" class="form-control" required/>
+        </div>
+      </div>
+      <div  class="form-group row m-3">
+        <label class="col-form-label col-sm-4">Position</label>
+        <div class="col-sm-4">
+          <input type="text" th:field="${experience.position}" class="form-control" required/>
+        </div>
+      </div>
+      <div  class="form-group row m-3">
+        <label class="col-form-label col-sm-4">Date from</label>
+        <div class="col-sm-4">
+          <input type="date" th:field="${experience.dateFrom}" class="form-control" required/>
+        </div>
+      </div>
+      <div  class="form-group row m-3">
+        <label class="col-form-label col-sm-4">Date to</label>
+        <div class="col-sm-4">
+          <input type="date" th:field="${experience.dateTo}" class="form-control" required/>
+        </div>
+      </div>
+      <div  class="form-group row m-3">
+        <label class="col-form-label col-sm-4">Description</label>
+        <div class="col-sm-4">
+          <textarea th:field="${experience.description}" cols="33" rows="5" maxlength="2000"></textarea>
+        </div>
+      </div>
+      <div class="text-center p-3">
+        <button type="submit" class="btn btn-secondary btn-lg" id="save" >Update</button>
+      </div>
+    </div>
+  </form>
+</div>
+</body>
+</html>

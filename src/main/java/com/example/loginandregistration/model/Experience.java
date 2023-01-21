@@ -1,9 +1,11 @@
 package com.example.loginandregistration.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -21,9 +23,11 @@ public class Experience {
     private String company;
     private String position;
     @Column(name="date_from")
-    private LocalDate dateFrom;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date dateFrom;
     @Column(name="date_to")
-    private LocalDate dateTo;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date dateTo;
     @Column(length = 2000)
     private String description;
 
@@ -31,7 +35,7 @@ public class Experience {
     @JoinColumn(name = "resume_id")
     private Resume resume;
 
-    public Experience(String company, String position, LocalDate dateFrom, LocalDate dateTo, String description) {
+    public Experience(String company, String position, Date dateFrom, Date dateTo, String description) {
         this.company = company;
         this.position = position;
         this.dateFrom = dateFrom;

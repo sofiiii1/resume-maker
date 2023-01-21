@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -16,10 +17,10 @@ public class EducationDto {
     private String faculty;
     @Past(message = "Date is invalid")
     @DateTimeFormat(pattern = "yyyy-mm-dd")
-    private LocalDate dateFrom;
+    private Date dateFrom;
     @Past(message = "Date is invalid")
     @DateTimeFormat(pattern = "yyyy-mm-dd")
-    private LocalDate dateTo;
+    private Date dateTo;
     private String description;
     private Integer resumeId;
 }

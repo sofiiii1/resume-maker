@@ -24,18 +24,18 @@ public class Education {
     private String institution;
     private String faculty;
     @Column(name = "date_from")
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
-    private LocalDate dateFrom;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date dateFrom;
     @Column(name = "date_to")
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
-    private LocalDate dateTo;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date dateTo;
     @Column(length = 2000)
     private String description;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "resume_id")
     private Resume resume;
 
-    public Education(String institution, String faculty, LocalDate dateFrom, LocalDate dateTo, String description) {
+    public Education(String institution, String faculty, Date dateFrom, Date dateTo, String description) {
         this.institution = institution;
         this.faculty = faculty;
         this.dateFrom = dateFrom;

@@ -4,12 +4,16 @@ import com.example.loginandregistration.dto.EducationDto;
 import com.example.loginandregistration.dto.ExperienceDto;
 import com.example.loginandregistration.dto.SkillDto;
 import com.example.loginandregistration.model.*;
+import com.example.loginandregistration.repository.ExperienceRepository;
 import com.example.loginandregistration.repository.ResumeRepository;
+import com.example.loginandregistration.repository.UserRepository;
 import com.example.loginandregistration.service.*;
 import com.lowagie.text.DocumentException;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.validation.Valid;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,7 +32,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.FileSystems;
 import java.security.Principal;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 
@@ -44,6 +51,10 @@ public class ResumeController {
     private SpringTemplateEngine templateEngine;
     @Autowired
     private ResumeRepository resumeRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ExperienceRepository experienceRepository;
 
     @Autowired
     public ResumeController(ResumeService resumeService, UserService userService, EducationService educationService, ExperienceService experienceService, SkillService skillService) {
@@ -195,4 +206,106 @@ public class ResumeController {
         tidy.parseDOM(inputStream, outputStream);
         return outputStream.toString("UTF-8");
     }
+
+    @GetMapping("/editResume/{id}")
+    public String editResume(@PathVariable("id")Integer id, Model model){
+        Resume resume=resumeService.getById(id);
+        model.addAttribute("resume", resume);
+        return "resume_edit_form";
+    }
+
+    @PutMapping("/editResume/{id}")
+    public String updateResume(@PathVariable("id") Integer id, @RequestParam  String firstName, @RequestParam String lastName, @RequestParam  String dateOfBirth, @RequestParam String phone, @RequestParam String email, @RequestParam String biography) throws Exception{
+        Resume updateResume=resumeService.getById(id);
+        updateResume.setFirstName(firstName);
+        updateResume.setLastName(lastName);
+        updateResume.setDateOfBirth(new SimpleDateFormat("yyyy-mm-dd").parse(dateOfBirth));
+        updateResume.setPhone(phone);
+        updateResume.setEmail(email);
+        updateResume.setBiography(biography);
+        resumeService.save(updateResume);
+        return "redirect:/generated_resume/"+id;
+    }
+
+    @GetMapping("/deleteResume/{id}")
+    public String deleteResume(@PathVariable("id")Integer id){
+        resumeService.deleteById(id);
+        return "redirect:/allResumes";
+    }
+
+    @GetMapping("/editSkill/{id}")
+    public String editSkill(@PathVariable("id") Integer id, Model model){
+        Skill skill=skillService.getById(id);
+        model.addAttribute("skill", skill);
+        return "skill_edit_form";
+    }
+    @PutMapping("/editSkill/{id}")
+    public String updateSkill(@PathVariable("id") Integer id, @RequestParam String skillName, @RequestParam String skillRating){
+        Skill updateSkill=skillService.getById(id);
+        updateSkill.setSkillName(skillName);
+        updateSkill.setSkillRating(Rating.valueOfLabel(skillRating));
+        skillService.save(updateSkill);
+        return "redirect:/generated_resume/"+updateSkill.getResume().getId();
+
+    }
+    @GetMapping("/deleteSkill/{id}")
+    public String deleteSkill(@PathVariable("id") Integer id){
+        Skill skill=skillService.getById(id);
+        Integer resumeId=skill.getResume().getId();
+        skillService.deleteById(id);
+        return "redirect:/generated_resume/"+resumeId;
+    }
+    @GetMapping("/editEducation/{id}")
+    public String editEducation(@PathVariable("id") Integer id, Model model){
+        Education education=educationService.getById(id);
+        model.addAttribute("education", education);
+        return "education_edit_form";
+    }
+
+    @PutMapping("/editEducation/{id}")
+    public String updateEducation(@PathVariable("id") Integer id, @RequestParam String institution, @RequestParam String faculty, @RequestParam String dateFrom, @RequestParam String dateTo, @RequestParam String description) throws Exception{
+        Education updatedEducation=educationService.getById(id);
+        updatedEducation.setInstitution(institution);
+        updatedEducation.setFaculty(faculty);
+        updatedEducation.setDateFrom(new SimpleDateFormat("yyyy-mm-dd").parse(dateFrom));
+        updatedEducation.setDateTo(new SimpleDateFormat("yyyy-mm-dd").parse(dateTo));
+        updatedEducation.setDescription(description);
+        educationService.save(updatedEducation);
+        return "redirect:/generated_resume/"+updatedEducation.getResume().getId();
+    }
+    @GetMapping("/deleteEducation/{id}")
+    public String deleteEducation(@PathVariable("id") Integer id){
+        Education education=educationService.getById(id);
+        Integer resumeId=education.getResume().getId();
+        educationService.deleteById(id);
+        return "redirect:/generated_resume/"+resumeId;
+    }
+
+    @GetMapping("/editExperience/{id}")
+    public String editExperience(@PathVariable("id") Integer id, Model model){
+        Experience experience=experienceService.getById(id);
+        model.addAttribute("experience", experience);
+        return "experience_edit_form";
+    }
+    @GetMapping("/deleteExperience/{id}")
+    public String deleteExperience(@PathVariable("id") Integer id){
+        Experience experience=experienceService.getById(id);
+        Integer resumeId=experience.getResume().getId();
+        experienceService.deleteById(id);
+        return "redirect:/generated_resume/"+resumeId;
+    }
+    @PutMapping("/editExperience/{id}")
+    public String updateExperience(@PathVariable("id") Integer id, @RequestParam String company, @RequestParam String position, @RequestParam String dateFrom, @RequestParam String dateTo, @RequestParam String description) throws Exception{
+        Experience experience=experienceService.getById(id);
+        experience.setCompany(company);
+        experience.setPosition(position);
+        experience.setDateFrom(new SimpleDateFormat("yyyy-mm-dd").parse(dateFrom));
+        experience.setDateTo(new SimpleDateFormat("yyyy-mm-dd").parse(dateTo));
+        experience.setDescription(description);
+        experienceService.save(experience);
+        return "redirect:/generated_resume/"+experience.getResume().getId();
+    }
+
+
+
 }

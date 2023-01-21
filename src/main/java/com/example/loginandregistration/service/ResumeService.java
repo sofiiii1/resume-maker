@@ -36,4 +36,6 @@ public class ResumeService implements Service<Resume>{
     public Resume getById(Integer id) {
         return resumeRepository.findById(id).get();
     }
+
+
 }
